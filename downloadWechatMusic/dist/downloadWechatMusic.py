@@ -3,7 +3,7 @@ import urllib
 import re
 import os
 
-baseUrl = 'https://res.wx.qq.com/voice/getvoice?mediaid='
+baseUrl = 'http://res.wx.qq.com/voice/getvoice?mediaid='
 status = 0
 print 'Specification'
 print u'说明书：'
@@ -24,7 +24,7 @@ def downloadHymns(a):
         print u'请继续粘贴你复制诗歌的链接'
     elif a == 2:
         print u'请确认诗歌链接后再复制粘贴'
-    htmlUrl = raw_input("Please paste the poem's website:")
+    htmlUrl = raw_input("Please paste the poem's website: ")
     try:
         if htmlUrl == "exit":
             os._exit(0)
@@ -32,17 +32,17 @@ def downloadHymns(a):
         if not os.path.exists('D:/Music'):
             os.mkdir('D:/Music')
         htmlDom = urllib.urlopen(htmlUrl).read()
-        reg = r'voice_encode_fileid="([0-9a-zA-Z]+)">'
-        regTitle = r'<title>([\♪\[0-9a-zA-Z\s\,\!\?\*\&\%\$\@\#\]\(\)\{\}\.\+\|\^]+)</title>'
-        urlre = re.compile(reg)
+        reg = r'voice_encode_fileid="(.*)" play_length'
+        regTitle = r'<title>(.*)</title>'
+        urlRe = re.compile(reg)
         urlReTitle = re.compile(regTitle)
-        urlList = re.findall(urlre, htmlDom)
+        urlList = re.findall(urlRe, htmlDom)
         urlTitle = re.findall(urlReTitle, htmlDom)
         print baseUrl + urlList[0]
         print urlTitle[0]
         urllib.urlretrieve(baseUrl + urlList[0], 'D://Music//' + urlTitle[0].decode('utf-8') + '.mp3')
         status = 1
-        print "Download successfully, the download file in D:/Music file."
+        print "Download successfully, the download file in D:/Music folder."
     except:
         print "Copy url error, please copy again and paste it."
         status = 2
